@@ -1,0 +1,5 @@
+{
+  "name": "Cosmetic Studio AI",
+  "description": "Ứng dụng tạo và chỉnh sửa ảnh sản phẩm mỹ phẩm chuyên nghiệp sử dụng Gemini Pro Vision. Hỗ trợ độ phân giải 4K, 8K và tải ảnh sản phẩm mẫu.",
+  "requestFramePermissions": []
+}

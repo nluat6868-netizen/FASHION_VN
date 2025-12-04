@@ -3,21 +3,17 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ExtractionSettings, MergeSettings, ImageQuality } from "../types";
 import { VARIATION_CONFIGS } from "../constants";
 
+// User provided API Key
+const API_KEY = 'AIzaSyAEzGJ1L57xv-4YLuqQVIhwVoo8spiur58';
+
 export const checkApiKey = async (): Promise<boolean> => {
-  const win = window as any;
-  if (win.aistudio && win.aistudio.hasSelectedApiKey) {
-    const hasKey = await win.aistudio.hasSelectedApiKey();
-    if (hasKey) return true;
-  }
-  if (process.env.API_KEY) return true;
-  return false;
+  // Always return true as we have a hardcoded key
+  return true;
 };
 
 export const selectApiKey = async (): Promise<void> => {
-  const win = window as any;
-  if (win.aistudio && win.aistudio.openSelectKey) {
-    await win.aistudio.openSelectKey();
-  }
+  // No-op
+  console.log("Using provided API Key");
 };
 
 const resizeImage = async (file: File, maxDimension = 1024): Promise<string> => {
@@ -114,7 +110,7 @@ const handleResponse = (response: any, defaultError: string) => {
 };
 
 export const extractProduct = async (settings: ExtractionSettings): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
   const { modelName, imageSize } = getModelConfig(settings.quality);
   
   const imagePart = await fileToPart(settings.inputImage);
@@ -165,7 +161,7 @@ export const mergeProductWithModel = async (settings: MergeSettings & {
   season?: string,
   hairstyle?: string 
 }): Promise<string[]> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
   const { modelName, imageSize } = getModelConfig(settings.quality);
 
   const productPart = await fileToPart(settings.productImage);
@@ -269,7 +265,7 @@ export const mergeProductWithModel = async (settings: MergeSettings & {
 };
 
 export const generateCreativePrompt = async (productImage: File): Promise<string[]> => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
     const imagePart = await fileToPart(productImage);
 
     const prompt = `
@@ -315,7 +311,7 @@ export const generateVideoPrompt = async (
     variationLabel: string, 
     settings: { style: string, background: string, lighting: string, modelType: string }
 ): Promise<string> => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
 
     const prompt = `
         You are an expert Prompt Engineer for Video Generation AI (like Sora, Veo, Runway Gen-3).
@@ -359,7 +355,7 @@ export const generateFashionVideo = async (
   prompt: string
 ): Promise<string> => {
   // Use a new instance to ensure we pick up the latest API key
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
   
   // Extract base64 data and mimeType from data URL
   const matches = imageBase64DataUrl.match(/^data:(image\/[a-z]+);base64,(.+)$/);
@@ -399,7 +395,7 @@ export const generateFashionVideo = async (
     }
 
     // Fetch the actual video content to create a blob URL (safely handling the API Key)
-    const downloadUrl = `${videoUri}&key=${process.env.API_KEY}`;
+    const downloadUrl = `${videoUri}&key=${API_KEY}`;
     const videoResponse = await fetch(downloadUrl);
     
     if (!videoResponse.ok) {
